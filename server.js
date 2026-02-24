@@ -9,7 +9,20 @@ const app = express()
 
 await connectDB()
 
-app.use(cors())
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:3000",
+      "https://your-frontend-domain.vercel.app"
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+)
+
+app.options("*", cors())
+
 app.use(express.json())
 
 app.get("/", (req, res) => {
