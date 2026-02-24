@@ -136,12 +136,21 @@ export const getBlogComments=async(req,res)=>{
 }
 
 
-export const generateContent=async(req,res)=>{
-    try{
-      const {prompt}=req.body;
-      const content = await main(prompt+'Generate a blog content  for this topic in simple text format');
-      res.json({success:true,content})
-    }catch(error){
-      res.json({success:false,message:error.message})
-    }
-}
+export const generateContent = async (req, res) => {
+  try {
+    const { prompt } = req.body;
+
+    const result = await main(
+      prompt + " Generate a blog content for this topic in simple text format"
+    );
+
+    // 🔥 Extract actual text from AI response
+    const content =
+      result?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+
+    res.json({ success: true, content });
+
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
