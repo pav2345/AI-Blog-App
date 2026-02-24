@@ -135,7 +135,6 @@ export const getBlogComments=async(req,res)=>{
   }
 }
 
-
 export const generateContent = async (req, res) => {
   try {
     const { prompt } = req.body;
@@ -144,13 +143,16 @@ export const generateContent = async (req, res) => {
       prompt + " Generate a blog content for this topic in simple text format"
     );
 
-    // 🔥 Extract actual text from AI response
-    const content =
-      result?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+    // 🔥 Extract text from Groq response
+    const content = result?.choices?.[0]?.message?.content || "";
 
     res.json({ success: true, content });
 
   } catch (error) {
-    res.json({ success: false, message: error.message });
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
   }
 };
+
